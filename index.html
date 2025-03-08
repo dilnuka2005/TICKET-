@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Ticketing</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Include html2canvas library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Event Ticketing System</h1>
+        <form id="ticket-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="nic">NIC:</label>
+            <input type="text" id="nic" name="nic" required>
+            
+            <label for="contact-type">Contact Type:</label>
+            <select id="contact-type" name="contact-type" required>
+                <option value="">Select an option</option>
+                <option value="phone">Phone</option>
+                <option value="email">Email</option>
+            </select>
+            
+            <div id="contact-input-container">
+                <!-- Phone or Email input will appear here -->
+            </div>
+            
+            <button type="submit">Generate Ticket</button>
+        </form>
+        <div id="ticket-result">
+            <!-- Ticket code and download button will appear here -->
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
