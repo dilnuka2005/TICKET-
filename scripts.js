@@ -1,22 +1,3 @@
-document.getElementById('contact-type').addEventListener('change', function() {
-    const contactType = this.value;
-    const contactInputContainer = document.getElementById('contact-input-container');
-
-    if (contactType === 'phone') {
-        contactInputContainer.innerHTML = `
-            <label for="phone">Phone:</label>
-            <input type="text" id="phone" name="phone" required>
-        `;
-    } else if (contactType === 'email') {
-        contactInputContainer.innerHTML = `
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        `;
-    } else {
-        contactInputContainer.innerHTML = ''; // Clear the container if no option is selected
-    }
-});
-
 document.getElementById('ticket-form').addEventListener('submit', function(event) {
     event.preventDefault();
     
@@ -26,12 +7,25 @@ document.getElementById('ticket-form').addEventListener('submit', function(event
     const phone = contactType === 'phone' ? document.getElementById('phone').value : null;
     const email = contactType === 'email' ? document.getElementById('email').value : null;
 
-    fetch('generate_ticket.php', {
+    // Generate a unique code
+    const code = generateCode();
+
+    // Prepare data for Google Sheets
+    const data = {
+        name: name,
+        nic: nic,
+        phone: phone,
+        email: email,
+        code: code
+    };
+
+    // Send data to Google Sheets
+    fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name, nic, phone, email })
+        body: JSON.stringify(data)
     })
     .then(response => response.json())
     .then(data => {
@@ -43,7 +37,7 @@ document.getElementById('ticket-form').addEventListener('submit', function(event
                     <p><strong>NIC:</strong> ${nic}</p>
                     ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
                     ${email ? `<p><strong>Email:</strong> ${email}</p>` : ''}
-                    <p>Your ticket code is: <strong>${data.code}</strong></p>
+                    <p>Your ticket code is: <strong>${code}</strong></p>
                     <button id="copy-button">Copy Code</button>
                     <button id="download-png">Download as PNG</button>
                 </div>
@@ -51,7 +45,7 @@ document.getElementById('ticket-form').addEventListener('submit', function(event
 
             // Add event listener for the copy button
             document.getElementById('copy-button').addEventListener('click', function() {
-                navigator.clipboard.writeText(data.code).then(() => {
+                navigator.clipboard.writeText(code).then(() => {
                     alert('Ticket code copied to clipboard!');
                 }).catch(() => {
                     alert('Failed to copy ticket code.');
@@ -63,13 +57,18 @@ document.getElementById('ticket-form').addEventListener('submit', function(event
                 downloadTicketAsPNG();
             });
         } else {
-            resultDiv.innerHTML = `<p style="color: red;">${data.message}</p>`;
+            resultDiv.innerHTML = `<p style="color: red;">Error saving data. Please try again.</p>`;
         }
     })
     .catch(error => {
         console.error('Error:', error);
     });
 });
+
+// Function to generate a unique code
+function generateCode() {
+    return Math.random().toString(36).substring(2, 8).toUpperCase();
+}
 
 // Function to download ticket as PNG
 function downloadTicketAsPNG() {
