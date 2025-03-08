@@ -20,7 +20,7 @@ document.getElementById('ticket-form').addEventListener('submit', function(event
     };
 
     // Send data to Google Sheets
-    fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+    fetch(https://script.google.com/d/1zw6umM6PbmVyht1zo2CocGjx2b5wIC2NaN0aImY0DWngg1v_DKnjoiWP/edit?usp=sharing, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
